@@ -5,8 +5,8 @@
     /* SERVER INFORMATION  */
     define('SVR', 'localhost');
     define('USR', 'root');
-    define('PWD', '');
-    define('DBS', '');
+    define('PWD', 'root');
+    define('DBS', 't2est');
 
 
     /* FILE PATH */
@@ -33,6 +33,7 @@
 
     session_start();
     
+
     
 
     
