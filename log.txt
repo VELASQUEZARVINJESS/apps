@@ -1,0 +1,92 @@
+Phase 1 — MUST (Baseline DICT controls)
+A. Authentication
+    Username + password (no email required).
+    Password hashing via password_hash/verify (adaptive, salted).
+    Password policy (min length ≥ 12; deny top-10k weak passwords).
+    Account lockout (≥5 failed attempts → lock 15 min; configurable).
+
+B. Session & CSRF
+    Rotate session ID on login.
+    Cookies: HttpOnly, Secure (HTTPS), SameSite=Lax/Strict.
+    CSRF tokens on all POSTs (login included).
+
+C. Access Control (RBAC-ready)
+    Users linked to department and role.
+    is_active flag; disabled users cannot login.
+
+D. Logging & Audit (minimum)
+    Server/app error logging enabled, no errors shown to users.
+    Auth events recorded at least in server logs (success/fail/lock).
+
+E. Security Headers & Transport
+    HTTPS-only; redirect HTTP→HTTPS.
+    Headers: X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy.
+    Minimal CSP allowing AdminLTE/CDNs used.
+
+F. Data Protection (DPA-aligned)
+    Privacy notice on login page (purpose, retention, contact).
+    Collect only necessary identifiers (username, dept, role).
+
+G. Database & Least Privilege
+    Prepared statements only.
+    App DB user with CRUD on app schema only; DB not internet-exposed.
+
+H. Backup & Recovery (baseline)
+    Daily DB backup; 7–30 days retention; documented restore steps.
+    Acceptance (Phase 1)
+    Valid admin logs in; session ID changes.
+
+5 bad tries → locked 15 min; after lock window, success possible.
+    CSRF missing/invalid → login POST rejected.
+    Disabled user denied.
+    Logs show success/fail/lock with timestamp/IP.
+    HTTP blocked/redirected to HTTPS; headers present.
+
+Phase 2 — SHOULD (DICT “good practice” / LGU governance)
+I. Audit & Monitoring
+    Audit log table: login_success, login_fail, login_locked, logout (timestamp, user, IP, UA).
+    Active sessions table (user, session_id, login_time, last_seen, IP, UA).
+    Auditor (read-only) dashboard: filters, CSV export.
+    Log retention policy (≥ 1 year; purge job).
+
+J. Advanced Access Controls
+    Roles + permissions (role_permissions), route-level checks.
+    Admin UI to enable/disable users, reset lockouts (logged).
+
+K. Password Lifecycle
+    Change password page (current/new/confirm).
+    Complexity checks, deny reuse (last N), optional expiry (e.g., 180 days, configurable).
+
+L. Rate Limiting & WAF
+    Reverse-proxy rate limits on /login.
+    Optional CAPTCHA after N failures (progressive challenge).
+
+M. Configuration & Secrets
+    Env-based config; no secrets in repo.
+    Separate dev/stage/prod; prod display_errors=Off.
+    Acceptance (Phase 2)
+    Auditor can view/download auth events without data access.
+    Active sessions show real-time “last seen”.
+    Permission-guarded page returns 403 if role lacks access.
+    Password change enforces policy and logs event.
+
+Phase 3 — COULD (Enhanced DICT/ISO/NIST alignment)
+N. MFA (Step-up)
+    TOTP (authenticator app) for admins; recovery codes.
+    Enforced MFA by role/department.
+
+O. Device & Network Hygiene
+    Email/SMS alert on first-time device or unusual IP.
+    Office-hours and geo/IP anomaly flags.
+
+P. Incident Readiness
+    Account compromise playbook; admin “force logout all”.
+    Tamper-evident audit logs (hash chain or WORM storage).
+
+Q. Compliance Ops
+    DPIA summary for login data.
+    Quarterly access review export (users + roles + departments).
+    Deliverables per Phase
+    Specs: PRD + checklist (this doc), mapping to tests.
+    DB: departments, roles, users (P1); audit_log, user_sessions (P2); permissions, role_permissions (P2).
+    Pages: login, logout, dashboard (P1); audit, sessions, change-password (P2).

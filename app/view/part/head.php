@@ -1,7 +1,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="/apps/assets/logo/LGU-DAET.png">
+  <link rel="icon" type="image/png" href="<?php echo ASSET_URL;?>/logo/LGU-DAET.png">
 
   <title><?php echo TITLE;?></title>
 
@@ -15,8 +15,8 @@
 
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <link rel="stylesheet" href="/assets/plugins/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="/assets/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="<?php echo ASSET_URL;?>/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="<?php echo ASSET_URL;?>/dist/css/adminlte.min.css">
 
 
   
